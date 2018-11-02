@@ -1,0 +1,183 @@
+# voting-storage-service-add-mysql.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: voting-storage
+  labels: 
+    app: voting-storage
+spec:
+  ports:
+  - port: 6379
+    name: redis
+  - port: 3306
+    name: mysql
+  selector:
+    app: voting-storage
+---
+# voting-storage-secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: voting-storage-secret
+type: Opaque
+data:
+  MYSQL_USER: ZGJ1c2Vy
+  MYSQL_PASSWORD: UGFzc3dvcmQxMg==
+  MYSQL_DATABASE: YXp1cmV2b3Rl
+  MYSQL_ROOT_PASSWORD: UGFzc3dvcmQxMg==
+---
+# voting-storage-deployment-2.0.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: voting-storage-2-0
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: voting-storage
+      version: "2.0"
+  template:
+    metadata:
+      labels:
+        app: voting-storage
+        version: "2.0"
+    spec:
+      containers:
+      - name: voting-storage
+        image: mcr.microsoft.com/aks/samples/voting/storage:2.0
+        args: ["--ignore-db-dir=lost+found"]
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: voting-storage-secret
+              key: MYSQL_ROOT_PASSWORD
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: voting-storage-secret
+              key: MYSQL_USER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: voting-storage-secret
+              key: MYSQL_PASSWORD
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: voting-storage-secret
+              key: MYSQL_DATABASE
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+# voting-analytics-deployment-2.0.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: voting-analytics-2-0
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: voting-analytics
+      version: "2.0"
+  template:
+    metadata:
+      labels:
+        app: voting-analytics
+        version: "2.0"
+    spec:
+      containers:
+      - name: voting-analytics
+        image: mcr.microsoft.com/aks/samples/voting/analytics:2.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: MYSQL_HOST
+          value: "voting-storage"
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: voting-storage-secret
+              key: MYSQL_USER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: voting-storage-secret
+              key: MYSQL_PASSWORD
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: voting-storage-secret
+              key: MYSQL_DATABASE
+---
+# voting-app-deployment-2.0.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: voting-app-2-0
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: voting-app
+      version: "2.0"
+  template:
+    metadata:
+      labels:
+        app: voting-app
+        version: "2.0"
+    spec:
+      containers:
+      - name: voting-app
+        image: mcr.microsoft.com/aks/samples/voting/app:2.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: SHOWDETAILS
+          value: "true"
+        - name: FEATUREFLAG
+          value: "true"
+        - name: MYSQL_HOST
+          value: "voting-storage"
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: voting-storage-secret
+              key: MYSQL_USER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: voting-storage-secret
+              key: MYSQL_PASSWORD
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: voting-storage-secret
+              key: MYSQL_DATABASE
+        - name: ANALYTICS_HOST
+          value: "voting-analytics"

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: voting-storage-1-0
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: voting-storage
+      version: "1.0"
+  template:
+    metadata:
+      labels:
+        app: voting-storage
+        version: "1.0"
+    spec:
+      containers:
+      - name: voting-storage
+        image: redis:4.0.10
+        ports:
+        - containerPort: 6379
+          name: redis

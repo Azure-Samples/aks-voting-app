@@ -1,0 +1,29 @@
+<div id="container">
+
+  <form name="setfeatureflag" action="/featureflag/set" method="post"></form>
+  <form name="clearfeatureflag" action="/featureflag/clear" method="post"></form>
+
+  <form id="form" name="form" action="/" method="post">
+
+    <div id="logo">{{ title }}</div>
+    
+    <div id="form">
+      <button name="vote" value="{{ vote1 }}" onclick="send()" class="button button1">{{ vote1 }}</button>
+      <button name="vote" value="{{ vote2 }}" onclick="send()" class="button button2">{{ vote2 }}</button>
+      <button name="vote" value="reset" onclick="send()" class="button button3">Reset</button>
+      <div id="results"> {{ analytics }} </div> 
+    </div>
+  
+    <div id="footer">
+      {{#if showDetails.isEnabled }}
+      host: {{ showDetails.hostName }}<br/>
+      store: mysql</br/>
+      {{/if}}
+      {{#if featureFlag.isEnabled }}
+      feature flag: {{#if featureFlag.isSet }}set{{else}}<a href="#" onclick="document.setfeatureflag.submit();">set</a>{{/if}} | {{#if featureFlag.isSet }}<a href="#" onclick="document.clearfeatureflag.submit();">clear</a>{{else}}clear{{/if}}
+      {{/if}}
+    </div>
+
+  </form>
+    
+</div>     

@@ -1,0 +1,20 @@
+{
+  "name": "aks-voting-app",
+  "version": "1.0.0",
+  "description": "The app component that forms part of the AKS Voting App sample application.",
+  "author": "Microsoft",
+  "license": "MIT",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.3",
+    "express-handlebars": "^3.0.0",
+    "body-parser": "^1.18.3",
+    "morgan": "^1.9.0",
+    "redis": "^2.8.0",
+    "request": "^2.87.0"
+  }
+}

@@ -1,0 +1,28 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: voting-analytics
+spec:
+  hosts:
+  - voting-analytics.azurevote.svc.cluster.local
+  http:
+  - match:
+    - sourceLabels:
+        app: voting-app
+        version: "1.0"
+    route:
+    - destination:
+        host: voting-analytics.azurevote.svc.cluster.local
+        subset: v1-1
+        port:
+          number: 8080
+  - match:
+    - sourceLabels:
+        app: voting-app
+        version: "2.0"
+    route:
+    - destination:
+        host: voting-analytics.azurevote.svc.cluster.local
+        subset: v2-0
+        port:
+          number: 8080

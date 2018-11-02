@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: voting-analytics-2-0
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: voting-analytics
+      version: "2.0"
+  template:
+    metadata:
+      labels:
+        app: voting-analytics
+        version: "2.0"
+    spec:
+      containers:
+      - name: voting-analytics
+        image: mcr.microsoft.com/aks/samples/voting/analytics:2.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: MYSQL_HOST
+          value: "voting-storage"
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: voting-storage-secret
+              key: MYSQL_USER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: voting-storage-secret
+              key: MYSQL_PASSWORD
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: voting-storage-secret
+              key: MYSQL_DATABASE

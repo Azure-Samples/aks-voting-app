@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: voting-storage
+  labels: 
+    app: voting-storage
+spec:
+  ports:
+  - port: 6379
+    name: redis
+  selector:
+    app: voting-storage

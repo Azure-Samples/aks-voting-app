@@ -1,0 +1,16 @@
+{
+  "name": "voting-analytics",
+  "version": "2.0.0",
+  "description": "Voting analytics service for the service mesh demo.",
+  "author": "Microsoft",
+  "license": "MIT",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.16.3",
+    "morgan": "^1.9.0",
+    "mysql2": "^1.6.1"
+  }
+}

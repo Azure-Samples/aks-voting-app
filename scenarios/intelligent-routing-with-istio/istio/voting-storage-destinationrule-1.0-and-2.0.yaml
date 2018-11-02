@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: voting-storage
+spec:
+  host: voting-storage.azurevote.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+  subsets:
+  - name: v1-0
+    labels:
+      app: voting-storage
+      version: "1.0"
+  - name: v2-0
+    labels:
+      app: voting-storage
+      version: "2.0"

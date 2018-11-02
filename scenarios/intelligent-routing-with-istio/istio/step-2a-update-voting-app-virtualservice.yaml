@@ -1,0 +1,17 @@
+# voting-app-virtualservice-1.0.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: voting-app
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - voting-app-gateway
+  http:
+  - route:
+    - destination:
+        host: voting-app.azurevote.svc.cluster.local
+        subset: v1-0
+        port:
+          number: 8080

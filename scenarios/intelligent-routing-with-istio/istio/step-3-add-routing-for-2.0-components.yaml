@@ -1,0 +1,167 @@
+# voting-app-destinationrule-1.0-and-2.0.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: voting-app
+spec:
+  host: voting-app.azurevote.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+  subsets:
+  - name: v1-0
+    labels:
+      app: voting-app
+      version: "1.0"
+  - name: v2-0
+    labels:
+      app: voting-app
+      version: "2.0"
+---
+# voting-app-virtualservice-1.0-and-2.0.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: voting-app
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - voting-app-gateway
+  http:
+  - match:
+    - headers:
+        cookie:
+          regex: "^(.*?;)?(featureflag=on)(;.*)?$"
+    route:
+    - destination:
+        host: voting-app.azurevote.svc.cluster.local
+        subset: v2-0
+        port:
+          number: 8080
+  - route:
+    - destination:
+        host: voting-app.azurevote.svc.cluster.local
+        subset: v1-0
+        port:
+          number: 8080
+---
+# voting-analytics-destinationrule-1.1-and-2.0.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: voting-analytics
+spec:
+  host: voting-analytics.azurevote.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+  subsets:
+  - name: v1-1
+    labels:
+      app: voting-analytics
+      version: "1.1"
+  - name: v2-0
+    labels:
+      app: voting-analytics
+      version: "2.0"
+---
+# voting-analytics-virtualservice-1.1-and-2.0.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: voting-analytics
+spec:
+  hosts:
+  - voting-analytics.azurevote.svc.cluster.local
+  http:
+  - match:
+    - sourceLabels:
+        app: voting-app
+        version: "1.0"
+    route:
+    - destination:
+        host: voting-analytics.azurevote.svc.cluster.local
+        subset: v1-1
+        port:
+          number: 8080
+  - match:
+    - sourceLabels:
+        app: voting-app
+        version: "2.0"
+    route:
+    - destination:
+        host: voting-analytics.azurevote.svc.cluster.local
+        subset: v2-0
+        port:
+          number: 8080
+---
+# voting-storage-destinationrule-1.0-and-2.0.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: voting-storage
+spec:
+  host: voting-storage.azurevote.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+  subsets:
+  - name: v1-0
+    labels:
+      app: voting-storage
+      version: "1.0"
+  - name: v2-0
+    labels:
+      app: voting-storage
+      version: "2.0"
+---
+# voting-storage-virtualservice-1.0-and-2.0.yaml
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: voting-storage
+spec:
+  hosts:
+  - voting-storage.azurevote.svc.cluster.local
+  tcp:
+  - match:
+    - sourceLabels:
+        app: voting-app
+        version: "1.0"
+    route:
+    - destination:
+        host: voting-storage.azurevote.svc.cluster.local
+        subset: v1-0
+        port:
+          number: 6379
+  - match:
+    - sourceLabels:
+        app: voting-analytics
+        version: "1.1"
+    route:
+    - destination:
+        host: voting-storage.azurevote.svc.cluster.local
+        subset: v1-0
+        port:
+          number: 6379
+  - match:
+    - sourceLabels:
+        app: voting-app
+        version: "2.0"
+    route:
+    - destination:
+        host: voting-storage.azurevote.svc.cluster.local
+        subset: v2-0
+        port:
+          number: 3306
+  - match:
+    - sourceLabels:
+        app: voting-analytics
+        version: "2.0"
+    route:
+    - destination:
+        host: voting-storage.azurevote.svc.cluster.local
+        subset: v2-0
+        port:
+          number: 3306
