@@ -1,57 +1,35 @@
-# Project Name
+# AKS Voting App sample
 
-(short, 1-3 sentenced, description of the project)
+This repo provides the source code and scenario artefacts for the AKS Voting App sample used in the [AKS documentation](https://docs.microsoft.com/en-us/azure/aks/).
 
-## Features
+## Supported scenarios
 
-This project framework provides the following features:
+### Intelligent routing and canary releases with Istio
 
-* Feature 1
-* Feature 2
-* ...
+The scenario artefacts are location in the `scenarios\intelligent-routing-with-istio` folder. The scenario can be followed in the AKS [Intelligent routing and canary releases with Istio](https://docs.microsoft.com/en-us/azure/aks/istio-scenario-routing) documentation.
 
-## Getting Started
+## Docker images
 
-### Prerequisites
+The AKS Voting App components are built from the source located in the `src` folder. These are published as the following images:
 
-(ideally very short, if any)
+- mcr.microsoft.com/aks/samples/voting/app:1.0
+- mcr.microsoft.com/aks/samples/voting/app:2.0
+- mcr.microsoft.com/aks/samples/voting/analytics:1.0
+- mcr.microsoft.com/aks/samples/voting/analytics:1.1
+- mcr.microsoft.com/aks/samples/voting/analytics:2.0
+- mcr.microsoft.com/aks/samples/voting/storage:2.0
 
-- OS
-- Library version
-- ...
+## Contributing
 
-### Installation
+This project welcomes contributions and suggestions. You can read more about how to contribute in the [Contributing Guidelines](CONTRIBUTING.md)
 
-(ideally very short)
+## Code of conduct
 
-- npm install [package name]
-- mvn install
-- ...
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
-### Quickstart
-(Add steps to get up and running quickly)
+---
 
-1. git clone [repository clone url]
-2. cd [respository name]
-3. ...
+This replaces all previous versions of the Azure Voting App sample to provide a single configurable sample that supports multiple scenarios:
 
-
-## Demo
-
-A demo app is included to show how to use the project.
-
-To run the demo, follow these steps:
-
-(Add steps to start up the demo)
-
-1.
-2.
-3.
-
-## Resources
-
-(Any additional resources or related projects)
-
-- Link to supporting information
-- Link to similar sample
-- ...
+- https://github.com/Azure-Samples/azure-voting-app-redis
+- https://github.com/Azure-Samples/azure-voting-app
