@@ -42,7 +42,7 @@ features, by not reporting duplicate issues. Provide as much detail as possible 
 ### <a name="submit-pr"></a> Submitting a Pull Request (PR)
 Before you submit your Pull Request (PR) consider the following guidelines:
 
-- Search the repository for an [open or closed PR] (https://github.com/Azure-Samples/aks-voting-app/pulls)
+- Search the repository for an [open or closed PR](https://github.com/Azure-Samples/aks-voting-app/pulls)
   that relates to your submission. You don't want to duplicate effort.
 - Make your changes in a new git fork:
 - Commit your changes using a descriptive commit message
