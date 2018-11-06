@@ -34,14 +34,16 @@ var analyticsPort = process.env.ANALYTICS_PORT || 8080;
 var mysql = require('mysql2');
 var config =
 {
-  host            : mySQLHost,
-  user            : mySQLUser,
-  password        : mySQLPassword,
-  database        : mySQLDatabase,
-  port            : mySQLPort,
-  ssl             : true
+  host                : mySQLHost,
+  user                : mySQLUser,
+  password            : mySQLPassword,
+  database            : mySQLDatabase,
+  port                : mySQLPort,
+  waitForConnections  : true,
+  connectionLimit     : 5,
+  queueLimit          : 0
 };
-var mysqlConnection = mysql.createConnection(config);
+var pool = mysql.createPool(config);
 
 function propagateTracingHeaders(req) {
   var headers = {};
@@ -103,13 +105,13 @@ app.post('/', function (req, res) {
 
   if (vote == 'reset') {
 
-    mysqlConnection.query('DELETE FROM azurevote', function (error, results, fields) {
+    pool.query('DELETE FROM azurevote', function (error, results, fields) {
       if (error) throw error;
     });
 
   } else {
 
-    mysqlConnection.query('INSERT INTO azurevote (votevalue) VALUES (?)', [vote], function (error, results, fields) {
+    pool.query('INSERT INTO azurevote (votevalue) VALUES (?)', [vote], function (error, results, fields) {
       if (error) throw error;
     });
   }

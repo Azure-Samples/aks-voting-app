@@ -20,19 +20,21 @@ var mySQLDatabase = process.env.MYSQL_DATABASE;
 var mysql = require('mysql2');
 var config =
 {
-  host            : mySQLHost,
-  user            : mySQLUser,
-  password        : mySQLPassword,
-  database        : mySQLDatabase,
-  port            : mySQLPort,
-  ssl             : true
+  host                : mySQLHost,
+  user                : mySQLUser,
+  password            : mySQLPassword,
+  database            : mySQLDatabase,
+  port                : mySQLPort,
+  waitForConnections  : true,
+  connectionLimit     : 5,
+  queueLimit          : 0
 };
-var mysqlConnection = mysql.createConnection(config);
+var pool = mysql.createPool(config);
 
 // GET - display vote form and analytics
 app.get('/analytics', function (req, res) {
 
-  mysqlConnection.query('select votevalue, count(votevalue) as count from azurevote where votevalue in (?,?) group by votevalue;', [vote1, vote2], function (error, results, fields) {
+  pool.query('select votevalue, count(votevalue) as count from azurevote where votevalue in (?,?) group by votevalue;', [vote1, vote2], function (error, results, fields) {
     if (error) throw error;
     
     var total = 0;
