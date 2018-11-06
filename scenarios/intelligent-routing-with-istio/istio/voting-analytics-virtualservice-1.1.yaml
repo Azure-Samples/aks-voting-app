@@ -4,7 +4,7 @@ metadata:
   name: voting-analytics
 spec:
   hosts:
-  - voting-analytics.azurevote.svc.cluster.local
+  - voting-analytics.voting.svc.cluster.local
   http:
   - match:
     - sourceLabels:
@@ -12,7 +12,7 @@ spec:
         version: "1.0"
     route:
     - destination:
-        host: voting-analytics.azurevote.svc.cluster.local
+        host: voting-analytics.voting.svc.cluster.local
         subset: v1-1
         port:
           number: 8080

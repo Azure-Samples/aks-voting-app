@@ -3,7 +3,7 @@ kind: DestinationRule
 metadata:
   name: voting-storage
 spec:
-  host: voting-storage.azurevote.svc.cluster.local
+  host: voting-storage.voting.svc.cluster.local
   trafficPolicy:
     tls:
       mode: ISTIO_MUTUAL

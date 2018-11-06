@@ -1,10 +1,20 @@
+# voting-policy.yaml
+apiVersion: "authentication.istio.io/v1alpha1"
+kind: "Policy"
+metadata:
+  name: "default"
+spec:
+  peers:
+  - mtls: 
+      mode: STRICT
+---
 # voting-app-destinationrule-1.0.yaml
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
   name: voting-app
 spec:
-  host: voting-app.azurevote.svc.cluster.local
+  host: voting-app.voting.svc.cluster.local
   trafficPolicy:
     tls:
       mode: ISTIO_MUTUAL
@@ -20,7 +30,7 @@ kind: DestinationRule
 metadata:
   name: voting-analytics
 spec:
-  host: voting-analytics.azurevote.svc.cluster.local
+  host: voting-analytics.voting.svc.cluster.local
   trafficPolicy:
     tls:
       mode: ISTIO_MUTUAL
@@ -41,7 +51,7 @@ metadata:
   name: voting-analytics
 spec:
   hosts:
-  - voting-analytics.azurevote.svc.cluster.local
+  - voting-analytics.voting.svc.cluster.local
   http:
   - match:
     - sourceLabels:
@@ -49,7 +59,7 @@ spec:
         version: "1.0"
     route:
     - destination:
-        host: voting-analytics.azurevote.svc.cluster.local
+        host: voting-analytics.voting.svc.cluster.local
         subset: v1-1
         port:
           number: 8080
@@ -60,7 +70,7 @@ kind: DestinationRule
 metadata:
   name: voting-storage
 spec:
-  host: voting-storage.azurevote.svc.cluster.local
+  host: voting-storage.voting.svc.cluster.local
   trafficPolicy:
     tls:
       mode: ISTIO_MUTUAL
@@ -77,7 +87,7 @@ metadata:
   name: voting-storage
 spec:
   hosts:
-  - voting-storage.azurevote.svc.cluster.local
+  - voting-storage.voting.svc.cluster.local
   tcp:
   - match:
     - sourceLabels:
@@ -85,7 +95,7 @@ spec:
         version: "1.0"
     route:
     - destination:
-        host: voting-storage.azurevote.svc.cluster.local
+        host: voting-storage.voting.svc.cluster.local
         subset: v1-0
         port:
           number: 6379
@@ -95,7 +105,7 @@ spec:
         version: "1.1"
     route:
     - destination:
-        host: voting-storage.azurevote.svc.cluster.local
+        host: voting-storage.voting.svc.cluster.local
         subset: v1-0
         port:
           number: 6379

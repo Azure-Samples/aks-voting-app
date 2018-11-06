@@ -9,9 +9,12 @@ spec:
   gateways:
   - voting-app-gateway
   http:
-  - route:
+  - match:
+    - uri:
+        prefix: /
+    route:
     - destination:
-        host: voting-app.azurevote.svc.cluster.local
+        host: voting-app.voting.svc.cluster.local
         subset: v1-0
         port:
           number: 8080

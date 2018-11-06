@@ -55,6 +55,7 @@ _append_yaml_files $path/step-2a-update-voting-app-virtualservice.yaml \
   $path/voting-app-virtualservice-1.0.yaml
 
 _append_yaml_files $path/step-2b-add-routing-for-all-components.yaml \
+  $path/voting-policy.yaml \
   $path/voting-app-destinationrule-1.0.yaml \
   $path/voting-analytics-destinationrule-1.0-and-1.1.yaml \
   $path/voting-analytics-virtualservice-1.1.yaml \

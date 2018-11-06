@@ -13,6 +13,6 @@ spec:
         prefix: /
     route:
     - destination:
-        host: voting-app.azurevote.svc.cluster.local
+        host: voting-app.voting.svc.cluster.local
         port:
           number: 8080
