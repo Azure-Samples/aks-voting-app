@@ -13,7 +13,7 @@ spec:
         prefix: /
       headers:
         cookie:
-          regex: "^(.*?;)?(featureflag=on)(;.*)?$"
+          regex: "^(.*?; ?)?(featureflag=on)(;.*)?$"
     route:
     - destination:
         host: voting-app.voting.svc.cluster.local
