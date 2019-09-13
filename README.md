@@ -1,3 +1,14 @@
+---
+page_type: sample
+languages:
+- javascript
+- html
+products:
+- azure
+description: "This repo provides the source code and scenario artefacts for the AKS Voting App sample used in the AKS documentation."
+urlFragment: aks-voting-app
+---
+
 # AKS Voting App sample
 
 This repo provides the source code and scenario artefacts for the AKS Voting App sample used in the [AKS documentation](https://docs.microsoft.com/en-us/azure/aks/).
