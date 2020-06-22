@@ -9,12 +9,14 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "cookie-parser": "^1.4.3",
-    "express": "^4.16.3",
-    "express-handlebars": "^3.0.0",
-    "body-parser": "^1.18.3",
-    "morgan": "^1.9.0",
-    "mysql2": "^1.6.2",
-    "request": "^2.87.0"
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "express": "^4.17.1",
+    "express-handlebars": "^3.1.0",
+    "handlebars": "^4.7.6",
+    "minimist": ">=1.2.5",
+    "morgan": "^1.10.0",
+    "mysql2": "^1.7.0",
+    "request": "^2.88.2"
   }
 }
