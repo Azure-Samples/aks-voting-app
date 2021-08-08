@@ -13,15 +13,9 @@ urlFragment: aks-voting-app
 
 This repo provides the source code and scenario artefacts for the AKS Voting App sample used in the [AKS documentation](https://docs.microsoft.com/en-us/azure/aks/).
 
-## Supported scenarios
+## Container images
 
-### Intelligent routing and canary releases with Istio
-
-The scenario artefacts are location in the `scenarios\intelligent-routing-with-istio` folder. The scenario can be followed in the AKS [Intelligent routing and canary releases with Istio](https://docs.microsoft.com/en-us/azure/aks/istio-scenario-routing) documentation.
-
-## Docker images
-
-The AKS Voting App components are built from the source located in the `src` folder. These are published as the following images:
+The AKS Voting App components are built from the source located in the `src` folder. These are published as the following container images:
 
 - mcr.microsoft.com/aks/samples/voting/app:1.0
 - mcr.microsoft.com/aks/samples/voting/app:2.0
