@@ -1,5 +1,5 @@
 var express = require('express');
-var exphbs  = require('express-handlebars');
+var handlebars  = require('express-handlebars');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser')
 var request = require('request');
@@ -9,7 +9,7 @@ var morgan  = require('morgan');
 // Set up express
 var app = express();
 app.use(cookieParser());
-app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.engine('handlebars', handlebars.engine({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 app.use(express.static('static'));
 app.use(bodyParser.urlencoded({ extended: true })); 
@@ -31,8 +31,8 @@ var analyticsHost = process.env.ANALYTICS_HOST || "voting-analytics";
 var analyticsPort = process.env.ANALYTICS_PORT || 8080;
 
 // Set up mySQL connection
-var mysql = require('mysql2');
-var config =
+const mysql = require('mysql2');
+const config =
 {
   host                : mySQLHost,
   user                : mySQLUser,
@@ -43,7 +43,7 @@ var config =
   connectionLimit     : 5,
   queueLimit          : 0
 };
-var pool = mysql.createPool(config);
+const pool = mysql.createPool(config);
 
 function propagateTracingHeaders(req) {
   var headers = {};

@@ -1,5 +1,5 @@
 var express = require('express');
-var exphbs  = require('express-handlebars');
+var handlebars  = require('express-handlebars');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser')
 var request = require('request');
@@ -9,7 +9,7 @@ var morgan  = require('morgan');
 // Set up express
 var app = express();
 app.use(cookieParser());
-app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.engine('handlebars', handlebars.engine({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 app.use(express.static('static'));
 app.use(bodyParser.urlencoded({ extended: true })); 
@@ -28,14 +28,12 @@ var analyticsHost = process.env.ANALYTICS_HOST || "voting-analytics";
 var analyticsPort = process.env.ANALYTICS_PORT || 8080;
 
 // Set up redis
-var redis = require('redis');
-var redisClient = redis.createClient(redisPort, redisHost, { no_ready_check: true });
-redisClient.on('error', function (err) {
-  console.log('Could not connect to Redis - ' + err);
-});
-redisClient.on('connect', function() {
-  console.log('Connected to Redis.');
-});
+const redis = require('redis');
+const redisClient = redis.createClient({ url: 'redis://' + redisHost + ':' + redisPort })
+  .on('error', err => console.log('Redis Client Error', err))
+  .on('connect', msg => console.log('Connected to Redis.'));
+const start = async () => { await redisClient.connect(); };
+start();
 
 function propagateTracingHeaders(req) {
   var headers = {};
@@ -91,18 +89,18 @@ app.get('/', function (req, res) {
 });
 
 // POST - add a new vote, then render vote form and analytics
-app.post('/', function (req, res) {
+app.post('/', async (req, res) => {
 
   var vote = req.body['vote'];
 
   if (vote == 'reset') {
 
-    redisClient.set(vote1, 0);
-    redisClient.set(vote2, 0);
+    await redisClient.set(vote1, 0);
+    await redisClient.set(vote2, 0);
 
   } else {
 
-    redisClient.incr(vote);
+    await redisClient.incr(vote);
     
   }
 

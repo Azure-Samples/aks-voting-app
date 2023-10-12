@@ -16,4 +16,4 @@ The `redis` image exposes Redis via port `6379`.
 
 This component is available on DockerHub as a Docker image via:
 
-- redis:4.0.11
+- redis/redis-stack:7.2.0-v3
