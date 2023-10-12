@@ -17,8 +17,8 @@ var mySQLPort = process.env.MYSQL_PORT || 3306;
 var mySQLDatabase = process.env.MYSQL_DATABASE;
 
 // Set up mySQL connection
-var mysql = require('mysql2');
-var config =
+const mysql = require('mysql2');
+const config =
 {
   host                : mySQLHost,
   user                : mySQLUser,
@@ -29,7 +29,7 @@ var config =
   connectionLimit     : 5,
   queueLimit          : 0
 };
-var pool = mysql.createPool(config);
+const pool = mysql.createPool(config);
 
 // GET - display vote form and analytics
 app.get('/analytics', function (req, res) {
@@ -62,7 +62,7 @@ app.get('/analytics', function (req, res) {
       },
       "text": text
     });
-  });     
+  });
 });
 
 // Set up listener

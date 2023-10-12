@@ -1,0 +1,32 @@
+version: '3'
+services:
+  voting-storage:
+    image: redis/redis-stack:7.2.0-v3
+    container_name: voting-storage
+    ports:
+      - "6379:6379"
+      - "8001:8001"
+
+  voting-app:
+    build: src/app/1.0
+    image: voting-app:1.0
+    container_name: voting-app
+    environment:
+      - PORT=8080
+      - ANALYTICS_PORT=8081
+    ports:
+      - "8080:8080"
+    depends_on:
+     - voting-analytics
+     - voting-storage
+
+  voting-analytics:
+    build: src/analytics/1.0
+    image: voting-analytics:1.0
+    container_name: voting-analytics
+    environment:
+      - PORT=8081
+    ports:
+      - "8081:8081"
+    depends_on:
+     - voting-storage

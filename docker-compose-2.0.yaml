@@ -1,0 +1,38 @@
+version: '3'
+services:
+  voting-storage:
+    build: src/storage/2.0
+    image: voting-storage:2.0
+    container_name: voting-storage
+    env_file:
+    - mysql.env
+    ports:
+      - "3306:3306"
+
+  voting-app:
+    build: src/app/2.0
+    image: voting-app:2.0
+    container_name: voting-app
+    environment:
+      - PORT=8080
+      - ANALYTICS_PORT=8081
+    env_file:
+    - mysql.env
+    ports:
+      - "8080:8080"
+    depends_on:
+     - voting-analytics
+     - voting-storage
+
+  voting-analytics:
+    build: src/analytics/2.0
+    image: voting-analytics:2.0
+    container_name: voting-analytics
+    environment:
+      - PORT=8081
+    env_file:
+    - mysql.env
+    ports:
+      - "8081:8081"
+    depends_on:
+     - voting-storage

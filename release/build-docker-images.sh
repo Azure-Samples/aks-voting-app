@@ -1,16 +1,5 @@
 #!/bin/bash
 
-DEFAULT_REGISTRY="mcr.microsoft.com/aks/samples"
-REGISTRY=${1:-$DEFAULT_REGISTRY}
-SCRIPT=$0
-
-_show_usage() {
-	echo "Usage: $SCRIPT [registry name]"
-	echo ""
-	echo "Examples:"
-	echo "  $SCRIPT \"mcr.microsoft.com/aks/samples\""
-}
-
 _build_docker_image() {
   local base_path="$1"
   local version="$2"
@@ -21,23 +10,17 @@ _build_docker_image() {
   cd -
 }
 
-if [ $# -lt 1 ]
-then
-	_show_usage
-	exit 1
-fi
-
 # app
 
-_build_docker_image "src/app" "1.0" "$REGISTRY/voting/app"
-_build_docker_image "src/app" "2.0" "$REGISTRY/voting/app"
+_build_docker_image "src/app" "1.0" "voting-app"
+_build_docker_image "src/app" "2.0" "voting-app"
 
 # analytics
 
-_build_docker_image "src/analytics" "1.0" "$REGISTRY/voting/analytics"
-_build_docker_image "src/analytics" "1.1" "$REGISTRY/voting/analytics"
-_build_docker_image "src/analytics" "2.0" "$REGISTRY/voting/analytics"
+_build_docker_image "src/analytics" "1.0" "voting-analytics"
+_build_docker_image "src/analytics" "1.1" "voting-analytics"
+_build_docker_image "src/analytics" "2.0" "voting-analytics"
 
 # storage
 
-_build_docker_image "src/storage" "2.0" "$REGISTRY/voting/storage"
+_build_docker_image "src/storage" "2.0" "voting-storage"
